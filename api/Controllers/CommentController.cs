@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using api.Dtos.Comment;
 using api.Interfaces;
 using api.Mappers;
 using Microsoft.AspNetCore.Components;
@@ -39,6 +40,41 @@ namespace api.Controllers
             }
 
             return Ok(comment.ToCommentDto());
+        }
+
+        [HttpPost("{stockId}")]
+        public async Task<IActionResult> Create([FromRoute] int stockId, [FromBody] CreateCommentDto commentDto)
+        {
+            var commentModel = commentDto.ToCommentFromCreateDTO();
+            await _commentRepo.CreateAsync(stockId ,commentModel);
+            if (commentModel == null)
+            {
+                return NotFound();
+            }
+            return Created();
+        }
+
+        [HttpPut("{commentId}")]
+        public async Task<IActionResult> Update([FromRoute] int commentId, [FromBody] CreateCommentDto commentDto)
+        {
+            var commentModel = commentDto.ToCommentFromCreateDTO();
+            await _commentRepo.UpdateAsync(commentId, commentModel);
+            if (commentModel == null)
+            {
+                return NotFound();
+            }
+            return Ok(commentModel.ToCommentDto());
+        }
+
+        [HttpDelete("{comId}")]
+        public async Task<IActionResult> Delete([FromRoute] int comId)
+        {
+            var commentModel = await _commentRepo.DeleteAsync(comId);
+            if (commentModel == null)
+            {
+                return NotFound();
+            }
+            return NoContent();
         }
     }
 }

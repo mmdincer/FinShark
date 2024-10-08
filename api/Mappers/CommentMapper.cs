@@ -9,6 +9,15 @@ namespace api.Mappers
 {
     public static class CommentMapper
     {
+        public static Comment ToComment(this CreateCommentDto commentDto)
+        {
+            return new Comment
+            {
+                Title = commentDto.Title,
+                Content = commentDto.Content
+            };
+        }
+
         public static CommentDto ToCommentDto(this Comment commentModel)
         {
             return new CommentDto
@@ -20,5 +29,16 @@ namespace api.Mappers
                 StockId = commentModel.StockId
             };
         }
+
+        public static Comment ToCommentFromCreateDTO(this CreateCommentDto commentDto)
+        {
+            return new Comment
+            {
+                Title = commentDto.Title,
+                Content = commentDto.Content,
+            };            
+        }
+
+
     }
 }
